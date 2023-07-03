@@ -4,7 +4,7 @@ import git
 # GitHub repository details
 github_username = "izemRachid"
 github_token = "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"
-repository_name = "great_expectations"
+repository_name = "airflow"
 
 # Get the new branch name from the user
 new_branch = input("Enter the new branch name: ")
@@ -33,10 +33,11 @@ etl_folder = None
 dags_folder = None
 
 for item in contents_data:
-    if item["name"] == "ETL":
-        etl_folder = item
-    elif item["name"] == "dags":
-        dags_folder = item
+    if item["type"] == "dir":
+        if item["name"] == "ETL":
+            etl_folder = item
+        elif item["name"] == "dags":
+            dags_folder = item
 
 # Create or update the branch folder
 if etl_folder is None and dags_folder is None:
