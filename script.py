@@ -2,11 +2,11 @@ import requests
 import git
 
 # GitHub repository details
-github_username = "your_username"
-github_token = "your_token"
-repository_name = "your_repository"
+github_username = "izemRachid"
+github_token = "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"
+repository_name = "great_expectations"
 
-# Get the new branch name from user
+# Get the new branch name from the user
 new_branch = input("Enter the new branch name: ")
 
 # Connect to GitHub and authenticate
@@ -27,21 +27,20 @@ if "message" in repo_data and repo_data["message"] == "Not Found":
 contents_url = repo_data["contents_url"].replace("{+path}", "")
 response = session.get(contents_url)
 contents_data = response.json()
-
-# Check if 'ETL' and 'query' folders exist
+print (contents_data)
+# Check if 'ETL' and 'dags' folders exist
 etl_folder = None
-query_folder = None
+dags_folder = None
 
 for item in contents_data:
-    if item["type"] == "dir":
-        if item["name"] == "ETL":
-            etl_folder = item
-        elif item["name"] == "query":
-            query_folder = item
+    if item["name"] == "ETL":
+        etl_folder = item
+    elif item["name"] == "dags":
+        dags_folder = item
 
 # Create or update the branch folder
-if etl_folder is None and query_folder is None:
-    print("Both 'ETL' and 'query' folders do not exist.")
+if etl_folder is None and dags_folder is None:
+    print("Both 'ETL' and 'dags' folders do not exist.")
 else:
     repo = git.Repo.clone_from(repo_data["clone_url"], repository_name)
     repo.git.checkout(new_branch)
@@ -49,11 +48,11 @@ else:
     if etl_folder:
         etl_folder_path = f"{repository_name}/ETL"
         etl_branch_path = f"{repository_name}/{new_branch}/ETL"
-        git.Repo.rename(etl_folder_path, etl_branch_path)
+        repo.git.mv(etl_folder_path, etl_branch_path)
     
-    if query_folder:
-        query_folder_path = f"{repository_name}/query"
-        query_branch_path = f"{repository_name}/{new_branch}/query"
-        git.Repo.rename(query_folder_path, query_branch_path)
+    if dags_folder:
+        dags_folder_path = f"{repository_name}/dags"
+        dags_branch_path = f"{repository_name}/{new_branch}/dags"
+        repo.git.mv(dags_folder_path, dags_branch_path)
 
     print(f"Branch '{new_branch}' created/updated with the relevant folders.")
