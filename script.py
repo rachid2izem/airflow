@@ -3,7 +3,7 @@ import git
 
 # GitHub repository details
 github_username = "izemRachid"
-github_token = "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"
+github_token = "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"
 repository_name = "airflow"
 
 # Get the new branch name from the user
@@ -17,7 +17,7 @@ session.auth = (github_username, github_token)
 repo_url = f"https://api.github.com/repos/{github_username}/{repository_name}"
 response = session.get(repo_url)
 repo_data = response.json()
-
+print(repo_data)
 # Check if the repository exists
 if "message" in repo_data and repo_data["message"] == "Not Found":
     print(f"Repository '{repository_name}' not found.")
@@ -27,7 +27,7 @@ if "message" in repo_data and repo_data["message"] == "Not Found":
 contents_url = repo_data["contents_url"].replace("{+path}", "")
 response = session.get(contents_url)
 contents_data = response.json()
-print (contents_data)
+print (contents_url)
 # Check if 'ETL' and 'dags' folders exist
 etl_folder = None
 dags_folder = None
